@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>IFE ECMAScript</title>
+</head>
+
+<body>
+    <select id="year-select" class="select">
+
+    </select>
+
+    <select id="month-select" class="select">
+
+    </select>
+
+    <select id="day-select" class="select">
+
+    </select>
+
+    <select id="hour-select" class="select">
+
+    </select>
+
+    <select id="minite-select" class="select">
+
+    </select>
+
+    <select id="second-select" class="select">
+
+    </select>
+
+    <p id="result-wrapper"></p>
+
+    <script>
+        render(); //渲染 年 月
+        var year_obj = document.getElementById("year-select");
+        var year_index = year_obj.selectedIndex;
+        var year = year_obj.options[year_index].value;
+        var month_obj = document.getElementById("month-select");
+        var month_index = month_obj.selectedIndex;
+        var month = month_obj.options[month_index].value;
+        //渲染 日
+        renderDays(year, month);
+
+        function change(){
+            // 获取变化后的year month，进行days渲染
+            year_index = year_obj.selectedIndex;
+            year = year_obj.options[year_index].value;
+
+            month_index = month_obj.selectedIndex;
+            month = month_obj.options[month_index].value;
+
+            renderDays(year, month);
+
+            // 获取day hour minite second
+            var day_obj = document.getElementById("day-select");
+            var day_index = day_obj.selectedIndex;
+            var day = day_obj.options[day_index].value;
+
+            var hour_obj = document.getElementById("hour-select");
+            var hour_index = hour_obj.selectedIndex;
+            var hour = hour_obj.options[hour_index].value;
+
+            var minite_obj = document.getElementById("minite-select");
+            var minite_index = minite_obj.selectedIndex;
+            var minite = minite_obj.options[minite_index].value;
+
+            var second_obj = document.getElementById("second-select");
+            var second_index = second_obj.selectedIndex;
+            var second = second_obj.options[second_index].value;
+
+            var dateBegin = new Date();
+            dateBegin.setFullYear(year);
+            dateBegin.setMonth(month);
+            dateBegin.setDate(day);
+            dateBegin.setHours(hour);
+            dateBegin.setMinutes(minite);
+            dateBegin.setSeconds(second);
+
+            //进行计算显示
+            document.getElementById("result-wrapper").innerHTML = "现在距离 "+year+"年"+month+"月"+day+"日" +showDaysofWeek1(dateBegin)+hour+":"+minite+":"+second + data1ToNow(dateBegin);
+
+        }
+
+        function showDaysofWeek1(date) {
+            return " 星期" + "日一二三四五六".charAt(date.getDay());
+           
+        }
+        var select_objs = document.getElementsByTagName("select");
+        for (let i = 0; i < select_objs.length; i++) {
+            const element = select_objs[i];
+            element.onchange = function(){
+                change();
+            }
+        }
+       
+
+        function data1ToNow(dateBegin) {
+            var dateEnd = new Date();//获取当前时间
+            var dateDiff = dateEnd.getTime() - dateBegin;//时间差的毫秒数
+            var dayDiff = Math.floor(dateDiff / (24 * 3600 * 1000));//计算出相差天数
+            var leave1 = dateDiff % (24 * 3600 * 1000)  //计算天数后剩余的毫秒数
+            var hours = Math.floor(leave1 / (3600 * 1000))//计算出小时数
+            //计算相差分钟数
+            var leave2 = leave1 % (3600 * 1000)  //计算小时数后剩余的毫秒数
+            var minutes = Math.floor(leave2 / (60 * 1000))//计算相差分钟数
+            //计算相差秒数
+            var leave3 = leave2 % (60 * 1000)   //计算分钟数后剩余的毫秒数
+            var seconds = Math.round(leave3 / 1000)
+            var timeFn = "";
+            if (dateDiff < 0) {
+                timeFn = " 还有";
+            } else {
+                timeFn = " 已经过去";
+            }
+            timeFn = timeFn + Math.abs(dayDiff) + " 天 " + Math.abs(hours) + " 小时 " + Math.abs(minutes) + " 分 " + Math.abs(seconds) + " 秒";
+            return timeFn;
+        }
+
+        function renderDays(year, month) {
+            //每次year/month变化时，运行
+            var days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            var dayss = "";
+            if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {
+                //闰年
+                days[1] = 29;
+            }
+            for (let i = 1; i <= days[month - 1]; i++) {
+                dayss = dayss + "<option value=" + i + ">" + i + "</option>";
+            }
+            document.getElementById("day-select").innerHTML = dayss;
+        }
+
+        function render() {
+            //只在页面加载时运行
+            //year渲染
+            var years = "<option value='2000' selected>2000</option>";
+            for (let i = 2001; i <= 2032; i++) {
+                years = years + "<option value=" + i + ">" + i + "</option>";
+            }
+            document.getElementById("year-select").innerHTML = years;
+
+            //month渲染
+            var month = "<option value='1' selected>1</option>";
+            for (let i = 2; i <= 12; i++) {
+                month = month + "<option value=" + i + ">" + i + "</option>";
+            }
+            document.getElementById("month-select").innerHTML = month;
+
+            // hour
+            var hour = "<option value='00' selected>00</option>";
+            for (let i = 1; i <= 9; i++) {
+                hour = hour + "<option value=0" + i + ">" + "0" + i + "</option>";
+            }
+            for (let i = 10; i <= 23; i++) {
+                hour = hour + "<option value=" + i + ">" + i + "</option>";
+            }
+            document.getElementById("hour-select").innerHTML = hour;
+
+            // minite
+            var minite = "<option value='00' selected>00</option>";
+            for (let i = 1; i <= 9; i++) {
+                minite = minite + "<option value=0" + i + ">" + "0" + i + "</option>";
+            }
+            for (let i = 10; i <= 59; i++) {
+                minite = minite + "<option value=" + i + ">" + i + "</option>";
+            }
+            document.getElementById("minite-select").innerHTML = minite;
+
+            // second
+            var second = "<option value='00' selected>00</option>";
+            for (let i = 1; i <= 9; i++) {
+                second = second + "<option value=0" + i + ">" + "0" + i + "</option>";
+            }
+            for (let i = 10; i <= 59; i++) {
+                second = second + "<option value=" + i + ">" + i + "</option>";
+            }
+            document.getElementById("second-select").innerHTML = second;
+        }
+
+
+    </script>
+
+</body>
+
+</html>

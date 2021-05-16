@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>IFE ECMAScript</title>
+</head>
+
+<body>
+    <div id="mytime1"></div> <br>
+    <div id="mytime2"></div>
+    <script>
+        function showDaysofWeek1(date) {
+            return "星期" + "日一二三四五六".charAt(date.getDay());
+           
+        }
+        function showDaysofWeek2(date) {
+            var arr = ["Sunday","Monday","Tusday","Wedsday","Tursday","Friday","Satday"];
+            return arr[date.getDay()];
+        }
+        function formatDate1(date) {
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            var hour = date.getHours();
+            var min = date.getMinutes();
+            var sec = date.getSeconds();
+
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            if (hour >= 0 && hour <= 9) {
+                hour = "0" + hour;
+            }
+            if (min >= 0 && min <= 9) {
+                min = "0" + min;
+            }
+            if (sec >= 0 && sec <= 9) {
+                sec = "0" + sec;
+            }
+            
+            var dayofweek = showDaysofWeek1(date);
+            var time = date.getFullYear() + "年" + month + "月" + strDate
+                + "日" + " " + dayofweek + " " + hour + ":" + min + ":" + sec;
+           
+            return time;
+        }
+        function formatDate2(date) {
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            var hour = date.getHours();
+            var min = date.getMinutes();
+            var sec = date.getSeconds();
+
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            if (hour >= 0 && hour <= 9) {
+                hour = "0" + hour;
+            }
+            if (min >= 0 && min <= 9) {
+                min = "0" + min;
+            }
+            if (sec >= 0 && sec <= 9) {
+                sec = "0" + sec;
+            }
+            
+            var dayofweek = showDaysofWeek2(date);
+            var time =  date.getFullYear() +"-"+ month +"-"+ strDate +" "+ dayofweek +
+            " " + hour + ":" + min + ":" + sec ; 
+            if (date.getHours() >=0 && date.getHours() <12 ) {
+                time = time +" AM";
+            } else {
+                time = time +" PM";
+            }
+            return time;
+        }
+        function getTime() {
+            var date = new Date();
+            var time = formatDate1(date);            
+            document.getElementById('mytime1').innerHTML = time;
+            time = formatDate2(date);            
+            document.getElementById('mytime2').innerHTML = time;
+            return currentDate;
+        }
+        //一次性定时器  setTimeout()
+        var id = setInterval('getTime()', 1000);
+
+    </script>
+</body>
+
+</html>
